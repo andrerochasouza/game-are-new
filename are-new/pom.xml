@@ -86,7 +86,7 @@
 
     <profiles>
         <profile>
-            <id>jar-with-dependencies</id>
+            <id>jar-complete</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
