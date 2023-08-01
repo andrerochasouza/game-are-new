@@ -12,16 +12,22 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
+      - uses: actions/checkout@v3
 
-    - name: Run tests with Maven
-      run: mvn test
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Build with Maven
-      run: mvn clean compile javafx:jlink
+      - name: Show JDK path (for debugging)
+        run: echo ${{ env.JAVA_HOME }} # Verifica o caminho do JDK
+
+      - name: Run tests with Maven
+        run: mvn test
+
+      - name: Build with Maven
+        env:                          # Define a variável de ambiente para o Maven usar
+          JLINK_PATH: ${{ env.JAVA_HOME }}/bin/jlink
+        run: mvn clean compile javafx:jlink -DjlinkExecutable=$JLINK_PATH
