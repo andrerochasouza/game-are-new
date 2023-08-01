@@ -31,23 +31,10 @@ jobs:
           ForEach-Object { $_ -replace '<jlinkExecutable>.*</jlinkExecutable>', $jlinkExecutable } |
           Set-Content pom.xml
           Get-Content pom.xml
-          mvn clean compile javafx:jlink
+          mvn clean compile javafx:jlink 
 
-      - name: Move ZIP to separate directory
-        run: |
-          mkdir apps-zip
-          mv target\app.zip apps-zip\
-        continue-on-error: true
-
-      - name: Get current date
-        id: get_date
-        run: echo "::set-output name=date::$(Get-Date -f 'dd_MM_yyyy')"
-
-      - name: Rename ZIP file with current date
-        run: |
-          $date = "${{ steps.get_date.outputs.date }}"
-          ren apps-zip\app.zip "v1_app_$date.zip"
-
-      - name: List contents of apps-zip directory
-        run: |
-          dir apps-zip\ /s
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-zip
+          path: apps-zip
