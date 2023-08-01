@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -22,10 +22,29 @@ jobs:
           cache: maven
 
       - name: Show JDK path (for debugging)
-        run: echo ${{ env.JAVA_HOME }} # Verifica o caminho do JDK
+        run: echo $env:JAVA_HOME
 
       - name: Build with Maven
         run: |
-          sed -i "s|<jlinkExecutable>.*</jlinkExecutable>|<jlinkExecutable>${{ env.JAVA_HOME }}/bin/jlink</jlinkExecutable>|g" pom.xml
-          cat pom.xml
+          (Get-Content pom.xml) -replace '<jlinkExecutable>.*</jlinkExecutable>', '<jlinkExecutable>' + $env:JAVA_HOME + '\bin\jlink</jlinkExecutable>' | Set-Content pom.xml
+          Get-Content pom.xml
           mvn clean compile javafx:jlink
+
+      - name: Move ZIP to separate directory
+        run: |
+          mkdir apps-zip
+          mv target\app.zip apps-zip\
+        continue-on-error: true
+
+      - name: Get current date
+        id: get_date
+        run: echo "::set-output name=date::$(Get-Date -f 'dd_MM_yyyy')"
+
+      - name: Rename ZIP file with current date
+        run: |
+          $date = "${{ steps.get_date.outputs.date }}"
+          ren apps-zip\app.zip "v1_app_$date.zip"
+
+      - name: List contents of apps-zip directory
+        run: |
+          dir apps-zip\ /s
