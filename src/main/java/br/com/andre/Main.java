@@ -34,6 +34,7 @@ public class Main extends Application {
     }
 
     private void moverJogador(KeyCode keyCode) {
+
         switch (keyCode) {
             case UP:
                 jogador.setCenterY(jogador.getCenterY() - VELOCIDADE_MOVIMENTO);
@@ -51,6 +52,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
+        // Init the JavaFX application
         launch(args);
+
     }
 }
