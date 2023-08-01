@@ -1,5 +1,6 @@
 package br.com.andre;
 
+import br.com.andre.panels.GamePanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -9,22 +10,19 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
-    private static final int LARGURA_JANELA = 800;
-    private static final int ALTURA_JANELA = 600;
     private static final double VELOCIDADE_MOVIMENTO = 5.0;
 
     private Circle jogador;
 
     @Override
     public void start(Stage stage) {
-        Pane pane = new Pane();
-        Scene cena = new Scene(pane, LARGURA_JANELA, ALTURA_JANELA);
+        GamePanel gamePanel = new GamePanel();
+        Scene cena = new Scene(gamePanel);
 
         jogador = new Circle(30, Color.RED);
-        jogador.setCenterX(LARGURA_JANELA / 2);
-        jogador.setCenterY(ALTURA_JANELA / 2);
-        pane.getChildren().add(jogador);
+        jogador.setCenterX(gamePanel.getMaxHeight() / 2);
+        jogador.setCenterY(gamePanel.getMaxWidth() / 2);
+        gamePanel.getChildren().add(jogador);
 
         cena.setOnKeyPressed(e -> moverJogador(e.getCode()));
 
