@@ -19,8 +19,10 @@
         <junit.platform.version>1.9.2</junit.platform.version>
         <mockito.version>5.2.0</mockito.version>
         <sqlite.version>3.42.0.0</sqlite.version>
-        <slf4j.version>2.0.5</slf4j.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <logback.version>1.2.9</logback.version>
         <javafx.version>11</javafx.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
         <javafx.plugin.version>0.0.8</javafx.plugin.version>
 
     </properties>
@@ -45,15 +47,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
@@ -114,6 +122,7 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>

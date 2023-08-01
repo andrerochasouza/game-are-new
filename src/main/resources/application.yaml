@@ -2,8 +2,9 @@
 # Enviroments to define the number of tiles in the game (NES resolution is 256x224 | Tile 16x16)
 window:
   tile-pixels: 16
-  number-tile-height: 16
-  number-tile-width: 14
+  scale-tile: 4
+  tile-max-col: 16
+  tile-max-row: 12
 
 # Enviroment to define path to the sprites
 sprites:
