@@ -1,0 +1,15 @@
+
+# Enviroments to define the number of tiles in the game (NES resolution is 256x224 | Tile 16x16)
+window:
+  tile-pixels: 16
+  number-tile-height: 16
+  number-tile-width: 14
+
+# Enviroment to define path to the sprites
+sprites:
+  path: src\main\resources\sprites
+test: teste
+
+# Enviroment to define path to the database (SQLite)
+database:
+  path: src\main\resources\database
