@@ -13,6 +13,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>br.com.andre.Main</main.class>
+        <jlinkExecutable>C:\Users\1202000046\.jdks\corretto-11.0.17\bin\jlink</jlinkExecutable>
 
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <junit.platform.version>1.9.2</junit.platform.version>
@@ -120,7 +121,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <jlinkExecutable>C:\Users\1202000046\.jdks\corretto-11.0.17\bin\jlink</jlinkExecutable>
+                    <jlinkExecutable>${jlinkExecutable}</jlinkExecutable>
                     <compress>2</compress>
                     <noHeaderFiles>true</noHeaderFiles>
                     <stripDebug>true</stripDebug>
