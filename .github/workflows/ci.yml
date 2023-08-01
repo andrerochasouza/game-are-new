@@ -26,7 +26,10 @@ jobs:
 
       - name: Build with Maven
         run: |
-          (Get-Content pom.xml) -replace '<jlinkExecutable>.*</jlinkExecutable>', '<jlinkExecutable>' + $env:JAVA_HOME + '\bin\jlink</jlinkExecutable>' | Set-Content pom.xml
+          $jlinkExecutable = "<jlinkExecutable>" + $env:JAVA_HOME + "\bin\jlink</jlinkExecutable>"
+          (Get-Content pom.xml) |
+          ForEach-Object { $_ -replace '<jlinkExecutable>.*</jlinkExecutable>', $jlinkExecutable } |
+          Set-Content pom.xml
           Get-Content pom.xml
           mvn clean compile javafx:jlink
 
