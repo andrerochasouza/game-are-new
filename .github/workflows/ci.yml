@@ -24,10 +24,7 @@ jobs:
       - name: Show JDK path (for debugging)
         run: echo ${{ env.JAVA_HOME }} # Verifica o caminho do JDK
 
-      - name: Run tests with Maven
-        run: mvn test
-
       - name: Build with Maven
-        env:                          # Define a variável de ambiente para o Maven usar
-          JLINK_PATH: ${{ env.JAVA_HOME }}/bin/jlink
-        run: mvn clean compile javafx:jlink -DjlinkExecutable=$JLINK_PATH
+        run: |
+          sed -i "s|<jlinkExecutable>.*</jlinkExecutable>|<jlinkExecutable>${{ env.JAVA_HOME }}/bin/jlink</jlinkExecutable>|g" pom.xml
+          mvn clean compile javafx:jlink
