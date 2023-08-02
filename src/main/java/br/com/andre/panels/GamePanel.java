@@ -1,14 +1,18 @@
 package br.com.andre.panels;
 
-import br.com.andre.utils.Yml;
+import br.com.andre.utils.YmlUtils;
 import javafx.scene.layout.Pane;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class GamePanel extends Pane {
 
-    private final int tileSizeOriginal = Yml.get("window.tile-pixels", Integer.class).orElse(16);
-    private final int scaleTile = Yml.get("window.scale-tile", Integer.class).orElse(2);
-    private final int tileMaxCol = Yml.get("window.tile-max-col", Integer.class).orElse(16);
-    private final int tileMaxRow = Yml.get("window.tile-max-row", Integer.class).orElse(12);
+    private static final Logger logger = LogManager.getLogger(GamePanel.class);
+
+    private final int tileSizeOriginal = YmlUtils.get("window.tile-pixels", Integer.class);
+    private final int scaleTile = YmlUtils.get("window.scale-tile", Integer.class);
+    private final int tileMaxCol = YmlUtils.get("window.tile-max-col", Integer.class);
+    private final int tileMaxRow = YmlUtils.get("window.tile-max-row", Integer.class);
 
     private final int tileSize = this.tileSizeOriginal * this.scaleTile;
     private int screenHeight = this.tileSize * this.tileMaxRow;
@@ -19,6 +23,10 @@ public class GamePanel extends Pane {
         super();
         this.setPrefSize(this.screenWidth, this.screenHeight);
         this.setStyle("-fx-background-color: #000000;");
+        logger.info("GamePanel initialized");
+        logger.info("ScreenHeight: {}", this.screenHeight);
+        logger.info("ScreenWidth: {}", this.screenWidth);
+        logger.info("TileSize: {}", this.tileSize);
     }
 
 
