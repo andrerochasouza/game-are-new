@@ -50,6 +50,8 @@
             <groupId>org.sormula</groupId>
             <artifactId>sormula</artifactId>
             <version>${sormula.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/sormula/4.3/sormula-4.3.jar</systemPath>
         </dependency>
 
         <dependency>
