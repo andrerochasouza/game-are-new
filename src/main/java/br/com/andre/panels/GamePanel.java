@@ -15,18 +15,21 @@ public class GamePanel extends Pane {
     private final int tileMaxRow = YmlUtils.get("window.tile-max-row", Integer.class);
 
     private final int tileSize = this.tileSizeOriginal * this.scaleTile;
-    private int screenHeight = this.tileSize * this.tileMaxRow;
-    private int screenWidth = this.tileSize * this.tileMaxCol;
+    private final int screenHeight = this.tileSize * this.tileMaxRow;
+    private final int screenWidth = this.tileSize * this.tileMaxCol;
 
 
     public GamePanel() {
         super();
         this.setPrefSize(this.screenWidth, this.screenHeight);
         this.setStyle("-fx-background-color: #000000;");
+        logger.info("=================================================================================");
         logger.info("GamePanel initialized");
         logger.info("ScreenHeight: {}", this.screenHeight);
         logger.info("ScreenWidth: {}", this.screenWidth);
         logger.info("TileSize: {}", this.tileSize);
+        logger.info("=================================================================================");
+
     }
 
 
