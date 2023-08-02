@@ -4,12 +4,16 @@ import br.com.andre.panels.GamePanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class Main extends Application {
+
+    private static final Logger log = LogManager.getLogger(Main.class);
+
     private static final double VELOCIDADE_MOVIMENTO = 5.0;
 
     private Circle jogador;
@@ -20,8 +24,8 @@ public class Main extends Application {
         Scene cena = new Scene(gamePanel);
 
         jogador = new Circle(30, Color.RED);
-        jogador.setCenterX(gamePanel.getMaxHeight() / 2);
-        jogador.setCenterY(gamePanel.getMaxWidth() / 2);
+        jogador.setCenterX(gamePanel.getPrefWidth() / 2);
+        jogador.setCenterY(gamePanel.getPrefHeight() / 2);
         gamePanel.getChildren().add(jogador);
 
         cena.setOnKeyPressed(e -> moverJogador(e.getCode()));
@@ -50,6 +54,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
+        log.info("Starting application...");
 
         // Init the JavaFX application
         launch(args);
