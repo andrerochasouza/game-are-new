@@ -3,62 +3,71 @@ package br.com.andre;
 import br.com.andre.panels.GamePanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static javafx.application.Application.launch;
 
 public class Main extends Application {
 
     private static final Logger log = LogManager.getLogger(Main.class);
-
-    private static final double VELOCIDADE_MOVIMENTO = 5.0;
-
-    private Circle jogador;
+    private Scene scene;
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
+
         GamePanel gamePanel = new GamePanel();
-        Scene cena = new Scene(gamePanel);
+        this.scene = new Scene(gamePanel);
 
-        jogador = new Circle(30, Color.RED);
-        jogador.setCenterX(gamePanel.getPrefWidth() / 2);
-        jogador.setCenterY(gamePanel.getPrefHeight() / 2);
-        gamePanel.getChildren().add(jogador);
+        primaryStage.setTitle("Game");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-        cena.setOnKeyPressed(e -> moverJogador(e.getCode()));
+        ImageView image = new ImageView("file:src/main/resources/sprites/MiniWorldSprites/Animals/Boar.png");
+        image.setX(0);
+        image.setY(0);
+        image.setFitWidth(gamePanel.getTileSize());
+        image.setFitHeight(gamePanel.getTileSize());
 
-        stage.setTitle("Exemplo de Jogo com JavaFX");
-        stage.setScene(cena);
-        stage.show();
-    }
+        gamePanel.getChildren().add(image);
 
-    private void moverJogador(KeyCode keyCode) {
+        primaryStage.setOnCloseRequest(event -> {
+            log.info("Closing application...");
+            System.exit(0);
+        });
 
-        switch (keyCode) {
-            case UP:
-                jogador.setCenterY(jogador.getCenterY() - VELOCIDADE_MOVIMENTO);
-                break;
-            case DOWN:
-                jogador.setCenterY(jogador.getCenterY() + VELOCIDADE_MOVIMENTO);
-                break;
-            case LEFT:
-                jogador.setCenterX(jogador.getCenterX() - VELOCIDADE_MOVIMENTO);
-                break;
-            case RIGHT:
-                jogador.setCenterX(jogador.getCenterX() + VELOCIDADE_MOVIMENTO);
-                break;
-        }
+
+//        AnimationTimer animationTimer = new AnimationTimer() {
+//            long lastUpdate = 0;
+//
+//            @Override
+//            public void handle(long now) {
+//                // Atualize a cena apenas a cada 1 segundo (por exemplo)
+//                if (now - lastUpdate >= 1_000_000_000) {
+//                    // Chame o método de atualização da cena aqui
+//                    updateSceneWithNewData();
+//                    lastUpdate = now;
+//                }
+//            }
+//        };
+//
+//        animationTimer.start();
+
     }
 
     public static void main(String[] args) {
 
         log.info("Starting application...");
 
-        // Init the JavaFX application
-        launch(args);
+        try{
+            launch(args);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            System.exit(0);
+        }
 
     }
 }
