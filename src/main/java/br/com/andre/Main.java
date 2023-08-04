@@ -18,6 +18,7 @@ public class Main extends Application {
     private Fps fpsPanel;
     private Player player;
     private KeyHandler keyHandler;
+    private long lastTime = 0;
 
 
     @Override
@@ -27,7 +28,7 @@ public class Main extends Application {
         Scene scene = new Scene(gamePanel);
         fpsPanel = new Fps(gamePanel);
         keyHandler = new KeyHandler(scene);
-        player = new Player(gamePanel, keyHandler, "file:src/main/resources/sprites/MiniWorldSprites/Characters/Champions/Arthax.png");
+        player = new Player(gamePanel, keyHandler, 200, "file:src/main/resources/sprites/Boar");
 
         primaryStage.setTitle("Game");
         primaryStage.setScene(scene);
@@ -36,7 +37,11 @@ public class Main extends Application {
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                gameLoop();
+                if (now - lastTime >= 1_666_666L) { // 60 fps
+                    lastTime = now;
+                    gameLoop();
+                }
+
             }
         };
 
