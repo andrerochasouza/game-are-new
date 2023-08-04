@@ -1,60 +1,71 @@
 package br.com.andre;
 
+import br.com.andre.engine.KeyHandler;
+import br.com.andre.entity.Player;
+import br.com.andre.panels.Fps;
 import br.com.andre.panels.GamePanel;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static javafx.application.Application.launch;
 
 public class Main extends Application {
 
     private static final Logger log = LogManager.getLogger(Main.class);
-    private Scene scene;
+    private Fps fpsPanel;
+    private Player player;
+    private KeyHandler keyHandler;
+    private long lastTime = 0;
+
 
     @Override
     public void start(Stage primaryStage) {
 
         GamePanel gamePanel = new GamePanel();
-        this.scene = new Scene(gamePanel);
+        Scene scene = new Scene(gamePanel);
+        fpsPanel = new Fps(gamePanel);
+        keyHandler = new KeyHandler(scene);
+        player = new Player(gamePanel, keyHandler, 200, "file:src/main/resources/sprites/Boar");
 
         primaryStage.setTitle("Game");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        ImageView image = new ImageView("file:src/main/resources/sprites/MiniWorldSprites/Animals/Boar.png");
-        image.setX(0);
-        image.setY(0);
-        image.setFitWidth(gamePanel.getTileSize());
-        image.setFitHeight(gamePanel.getTileSize());
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (now - lastTime >= 1_666_666L) { // 60 fps
+                    lastTime = now;
+                    gameLoop();
+                }
 
-        gamePanel.getChildren().add(image);
+            }
+        };
+
+        animationTimer.start();
 
         primaryStage.setOnCloseRequest(event -> {
             log.info("Closing application...");
             System.exit(0);
         });
 
+    }
 
-//        AnimationTimer animationTimer = new AnimationTimer() {
-//            long lastUpdate = 0;
-//
-//            @Override
-//            public void handle(long now) {
-//                // Atualize a cena apenas a cada 1 segundo (por exemplo)
-//                if (now - lastUpdate >= 1_000_000_000) {
-//                    // Chame o método de atualização da cena aqui
-//                    updateSceneWithNewData();
-//                    lastUpdate = now;
-//                }
-//            }
-//        };
-//
-//        animationTimer.start();
+    private void gameLoop() {
+        update();
+        render();
+    }
 
+    private void update() {
+        fpsPanel.update(System.nanoTime());
+        player.update();
+    }
+
+    private void render() {
+        player.render();
     }
 
     public static void main(String[] args) {
