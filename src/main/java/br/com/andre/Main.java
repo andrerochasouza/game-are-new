@@ -4,6 +4,8 @@ import br.com.andre.engine.KeyHandler;
 import br.com.andre.entity.Player;
 import br.com.andre.panels.Fps;
 import br.com.andre.panels.GamePanel;
+import br.com.andre.terrain.ConstructManager;
+import br.com.andre.terrain.TileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,6 +19,8 @@ public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
     private Fps fpsPanel;
     private Player player;
+    private TileManager tileManager;
+    private ConstructManager constructManager;
     private KeyHandler keyHandler;
     private long lastTime = 0;
 
@@ -30,7 +34,19 @@ public class Main extends Application {
         keyHandler = new KeyHandler(scene);
         player = new Player(gamePanel, keyHandler, 200, "file:src/main/resources/sprites/Boar");
 
+        tileManager = new TileManager(gamePanel);
+        constructManager = new ConstructManager(gamePanel);
+
+        tileManager.addMap("map-1",
+                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1.txt",
+                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1");
+
+        constructManager.addConstructMap("map-1",
+                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1.txt",
+                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1");
+
         primaryStage.setTitle("Game");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -66,6 +82,8 @@ public class Main extends Application {
 
     private void render() {
         player.render();
+        constructManager.render("map-1");
+        tileManager.render("map-1");
     }
 
     public static void main(String[] args) {
@@ -75,7 +93,7 @@ public class Main extends Application {
         try{
             launch(args);
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Error starting application: " + e.getMessage());
         } finally {
             System.exit(0);
         }

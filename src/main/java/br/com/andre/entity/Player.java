@@ -17,7 +17,6 @@ public class Player extends Entity {
     private KeyCode lastKeyCode = null;
 
 
-
     public Player(GamePanel gamePanel, KeyHandler keyHandler, int animationVelocityMillis, String pathFolderSprites){
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
