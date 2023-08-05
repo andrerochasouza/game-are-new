@@ -1,10 +1,10 @@
 package br.com.andre;
 
+import br.com.andre.engine.Camera;
 import br.com.andre.engine.KeyHandler;
 import br.com.andre.entity.Player;
 import br.com.andre.panels.Fps;
 import br.com.andre.panels.GamePanel;
-import br.com.andre.terrain.ConstructManager;
 import br.com.andre.terrain.TileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -19,8 +19,8 @@ public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
     private Fps fpsPanel;
     private Player player;
-    private TileManager tileManager;
-    private ConstructManager constructManager;
+    private TileManager[] tileManager;
+    private Camera camera;
     private KeyHandler keyHandler;
     private long lastTime = 0;
 
@@ -30,20 +30,22 @@ public class Main extends Application {
 
         GamePanel gamePanel = new GamePanel();
         Scene scene = new Scene(gamePanel);
-        fpsPanel = new Fps(gamePanel);
         keyHandler = new KeyHandler(scene);
         player = new Player(gamePanel, keyHandler, 200, "file:src/main/resources/sprites/Boar");
+        camera = new Camera(gamePanel);
+        fpsPanel = new Fps(gamePanel);
 
-        tileManager = new TileManager(gamePanel);
-        constructManager = new ConstructManager(gamePanel);
+        tileManager = new TileManager[2];
+        tileManager[0] = new TileManager(gamePanel);
+        tileManager[1] = new TileManager(gamePanel);
 
-        tileManager.addMap("map-1",
+        tileManager[0].addMap("map-1",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1.txt",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1");
 
-        constructManager.addConstructMap("map-1",
+        tileManager[1].addMap("map-1",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1.txt",
-                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1");
+                "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1");
 
         primaryStage.setTitle("Game");
         primaryStage.setResizable(false);
@@ -76,14 +78,15 @@ public class Main extends Application {
     }
 
     private void update() {
-        fpsPanel.update(System.nanoTime());
         player.update();
+        camera.update(player);
+        fpsPanel.update(System.nanoTime());
     }
 
     private void render() {
+        tileManager[0].render("map-1");
+        tileManager[1].render("map-1");
         player.render();
-        constructManager.render("map-1");
-        tileManager.render("map-1");
     }
 
     public static void main(String[] args) {

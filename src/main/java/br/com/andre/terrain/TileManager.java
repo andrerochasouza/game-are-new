@@ -1,5 +1,6 @@
 package br.com.andre.terrain;
 
+import br.com.andre.entity.Player;
 import br.com.andre.panels.GamePanel;
 import br.com.andre.utils.FileUtils;
 import javafx.scene.Group;
@@ -7,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TileManager {
@@ -25,17 +27,6 @@ public class TileManager {
         this.gamePanel = gamePanel;
     }
 
-    public void loadMapByName(String name){
-        if(namedPathMaps.containsKey(name) && mapIsOn.get(name).equals(false)){
-            log.debug("Loading map: " + name);
-            String pathMap = namedPathMaps.get(name);
-            String pathTiles = namedPathTiles.get(name);
-            loadNewMap(pathMap, pathTiles);
-            mapIsOn.forEach((k, v) -> mapIsOn.put(k, false));
-            mapIsOn.put(name, true);
-        }
-    }
-
     public void render(String nameMap){
         loadMapByName(nameMap);
     }
@@ -50,6 +41,17 @@ public class TileManager {
         mapIsOn.put(name, false);
     }
 
+    private void loadMapByName(String name){
+        if(namedPathMaps.containsKey(name) && mapIsOn.get(name).equals(false)){
+            log.debug("Loading map: " + name);
+            String pathMap = namedPathMaps.get(name);
+            String pathTiles = namedPathTiles.get(name);
+            loadNewMap(pathMap, pathTiles);
+            mapIsOn.forEach((k, v) -> mapIsOn.put(k, false));
+            mapIsOn.put(name, true);
+        }
+    }
+
     private void loadNewMap(String pathMap, String pathTile){
 
         log.debug("=================================================================================");
@@ -62,7 +64,7 @@ public class TileManager {
 
         log.debug("Adding new map in game panel");
         gamePanel.getChildren().add(this.gruopTiles);
-        this.gruopTiles.toBack();
+
         log.debug("=================================================================================");
     }
 
@@ -75,34 +77,28 @@ public class TileManager {
                 throw new RuntimeException("Arquivo de mapa não existe ou não é um arquivo.");
             }
 
-            int charAmount = FileUtils.countCharsFile(pathMap);
-            log.debug("Quantidade de caracteres no arquivo ({}): {}", pathMap, charAmount);
-
             log.debug("Carregando mapa: " + pathMap);
-            BufferedReader reader = new BufferedReader(new FileReader(mapFile));
-            tilesRender = new Tile[charAmount];
-            String line;
-            int x = 0;
-            int z = 0;
+            tilesRender = new Tile[FileUtils.countCharsFile(pathMap)];
 
-            while ((line = reader.readLine()) != null) {
-                String[] numberTiles = line.split("");
-                for (int y = 0; y < numberTiles.length; y++) {
-                    int numberTile = Integer.parseInt(numberTiles[y]);
-                    int index = z + y;
-                    Tile tile = tilesImages[numberTile];
-                    tilesRender[index] = new Tile(tile.imageView.getImage().getUrl().split("file:")[1], tile.isCollidable);
-                    tilesRender[index].imageView.setX(y * gamePanel.getTileSize());
-                    tilesRender[index].imageView.setY(x * gamePanel.getTileSize());
-                    tilesRender[index].imageView.setFitHeight(gamePanel.getTileSize());
-                    tilesRender[index].imageView.setFitWidth(gamePanel.getTileSize());
-                     gruopTiles.getChildren().add(tilesRender[index].imageView);
+            int[][] matrixFileNumbers = FileUtils.fileToMatrix(pathMap);
+
+            int index = 0;
+            for (int x = 0; x < matrixFileNumbers.length; x++) {
+                for (int y = 0; y < matrixFileNumbers[0].length; y++) {
+                    if(matrixFileNumbers[x][y] != -1){
+                        Tile tile = tilesImages[matrixFileNumbers[x][y]];
+                        tilesRender[index] = new Tile(tile.imageView.getImage().getUrl().split("file:")[1], tile.isCollidable);
+                        tilesRender[index].imageView.setX(y * gamePanel.getTileSize());
+                        tilesRender[index].imageView.setY(x * gamePanel.getTileSize());
+                        tilesRender[index].imageView.setFitHeight(gamePanel.getTileSize());
+                        tilesRender[index].imageView.setFitWidth(gamePanel.getTileSize());
+                        gruopTiles.getChildren().add(tilesRender[index].imageView);
+                        index++;
+                    }
                 }
-                x++;
-                z += numberTiles.length;
             }
 
-        } catch (IOException e){
+        } catch (RuntimeException e){
             log.error("Erro ao carregar mapa", e);
             throw new RuntimeException("Erro ao carregar mapa", e);
         }
@@ -142,5 +138,4 @@ public class TileManager {
             throw new RuntimeException("Erro ao carregar tiles", e);
         }
     }
-
 }

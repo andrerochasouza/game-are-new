@@ -35,8 +35,8 @@ public class Player extends Entity {
     }
 
     public void setupDefaultValues(){
-        this.x = 100;
-        this.y = 100;
+        this.x = (gamePanel.getScreenWidth() / 2) - (gamePanel.getTileSize() / 2);
+        this.y = (gamePanel.getScreenHeight() / 2) - (gamePanel.getTileSize() / 2);
         this.speed = 5;
     }
 
