@@ -19,6 +19,7 @@ public class GamePanel extends Pane {
     public GamePanel() {
         super();
         super.setPrefSize(this.screenWidth, this.screenHeight);
+        super.setFocusTraversable(false);
 
         logger.info("=================================================================================");
         logger.info("GamePanel initialized");
@@ -38,5 +39,13 @@ public class GamePanel extends Pane {
 
     public int getScreenWidth() {
         return screenWidth;
+    }
+
+    public int getTileMaxCol() {
+        return tileMaxCol;
+    }
+
+    public int getTileMaxRow() {
+        return tileMaxRow;
     }
 }
