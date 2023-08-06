@@ -12,4 +12,12 @@ public class Tile {
         this.isCollidable = isCollidable;
     }
 
+    public ImageView getImageView(){
+        return this.imageView;
+    }
+
+    public boolean isCollidable(){
+        return this.isCollidable;
+    }
+
 }

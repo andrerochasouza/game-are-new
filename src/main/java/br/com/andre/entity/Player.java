@@ -1,10 +1,13 @@
 package br.com.andre.entity;
 
+import br.com.andre.engine.CollisionChecker;
 import br.com.andre.engine.KeyHandler;
 import br.com.andre.panels.GamePanel;
+import br.com.andre.terrain.TileManager;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Rectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +26,7 @@ public class Player extends Entity {
         this.pathFolderSprites = pathFolderSprites;
         this.imageView = new ImageView(pathFolderSprites + "/down-1.png");
         this.animationVelocityMillis = animationVelocityMillis;
+        this.solidArea = new Rectangle(10, 20, 44, 44);
         setupDefaultValues();
     }
 
@@ -31,6 +35,7 @@ public class Player extends Entity {
         this.keyHandler = keyHandler;
         this.pathFolderSprites = pathFolderSprites;
         this.imageView = new ImageView(pathFolderSprites + "/down-1.png");
+        this.solidArea = new Rectangle(10, 20, 44, 44);
         setupDefaultValues();
     }
 
@@ -44,7 +49,7 @@ public class Player extends Entity {
         return this.imageView;
     }
 
-    public void update() {
+    public void update(TileManager[] tileManagers){
         long currentTime = System.currentTimeMillis();
         long deltaTime = currentTime - lastUpdateTime;
 
@@ -100,6 +105,21 @@ public class Player extends Entity {
                 lastUpdateTime = currentTime;
             }
             this.lastKeyCode = null;
+        }
+
+        collisionOn = false;
+        CollisionChecker collisionChecker = new CollisionChecker(gamePanel, tileManagers);
+        if(lastKeyCode != null) collisionChecker.checkTile(this, lastKeyCode);
+        if(collisionOn) {
+            if (lastKeyCode == KeyCode.UP) {
+                y += speed;
+            } else if (lastKeyCode == KeyCode.DOWN) {
+                y -= speed;
+            } else if (lastKeyCode == KeyCode.LEFT) {
+                x += speed;
+            } else if (lastKeyCode == KeyCode.RIGHT) {
+                x -= speed;
+            }
         }
 
     }
