@@ -8,12 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 
 public class Player extends Entity {
-    private static final Logger log = LogManager.getLogger(Player.class);
     private GamePanel gamePanel;
     private KeyHandler keyHandler;
     private long lastUpdateTime = System.currentTimeMillis();
@@ -26,15 +25,6 @@ public class Player extends Entity {
         this.pathFolderSprites = pathFolderSprites;
         this.imageView = new ImageView(pathFolderSprites + "/down-1.png");
         this.animationVelocityMillis = animationVelocityMillis;
-        this.solidArea = new Rectangle(10, 20, 44, 44);
-        setupDefaultValues();
-    }
-
-    public Player(GamePanel gamePanel, KeyHandler keyHandler, String pathFolderSprites){
-        this.gamePanel = gamePanel;
-        this.keyHandler = keyHandler;
-        this.pathFolderSprites = pathFolderSprites;
-        this.imageView = new ImageView(pathFolderSprites + "/down-1.png");
         this.solidArea = new Rectangle(10, 20, 44, 44);
         setupDefaultValues();
     }
@@ -53,8 +43,13 @@ public class Player extends Entity {
         long currentTime = System.currentTimeMillis();
         long deltaTime = currentTime - lastUpdateTime;
 
+        List<DirectionEnum> directionsAceppted = new CollisionChecker(tileManagers)
+                .checkTilesToTraverse(this);
+
         if (keyHandler.isUp()) {
-            y -= speed;
+            if (directionsAceppted.contains(DirectionEnum.UP)) {
+                y -= speed;
+            }
             if(this.lastKeyCode != KeyCode.UP){
                 toggleImageUp();
             } else if(deltaTime >= animationVelocityMillis){
@@ -65,7 +60,9 @@ public class Player extends Entity {
         }
 
         if (keyHandler.isDown()) {
-            y += speed;
+            if (directionsAceppted.contains(DirectionEnum.DOWN)) {
+                y += speed;
+            }
             if(this.lastKeyCode != KeyCode.DOWN){
                 toggleImageDown();
             } else if(deltaTime >= animationVelocityMillis){
@@ -76,7 +73,9 @@ public class Player extends Entity {
         }
 
         if (keyHandler.isLeft()) {
-            x -= speed;
+            if(directionsAceppted.contains(DirectionEnum.LEFT)){
+                x -= speed;
+            }
             if(this.lastKeyCode != KeyCode.LEFT){
                 toggleImageLeft();
             } else if(deltaTime >= animationVelocityMillis){
@@ -87,7 +86,9 @@ public class Player extends Entity {
         }
 
         if (keyHandler.isRight()) {
-            x += speed;
+            if(directionsAceppted.contains(DirectionEnum.RIGHT)){
+                x += speed;
+            }
             if(this.lastKeyCode != KeyCode.RIGHT){
                 toggleImageRight();
             } else if(deltaTime >= animationVelocityMillis){
@@ -106,22 +107,6 @@ public class Player extends Entity {
             }
             this.lastKeyCode = null;
         }
-
-        collisionOn = false;
-        CollisionChecker collisionChecker = new CollisionChecker(gamePanel, tileManagers);
-        if(lastKeyCode != null) collisionChecker.checkTile(this, lastKeyCode);
-        if(collisionOn) {
-            if (lastKeyCode == KeyCode.UP) {
-                y += speed;
-            } else if (lastKeyCode == KeyCode.DOWN) {
-                y -= speed;
-            } else if (lastKeyCode == KeyCode.LEFT) {
-                x += speed;
-            } else if (lastKeyCode == KeyCode.RIGHT) {
-                x -= speed;
-            }
-        }
-
     }
 
     public void render(){

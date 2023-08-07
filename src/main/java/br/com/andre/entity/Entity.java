@@ -44,6 +44,7 @@ public class Entity {
 
     private void toggleImage(String baseName, String[] imageNames) {
 
+        try{
             String currentUrl = imageView.getImage().getUrl();
 
             for (int i = 0; i < imageNames.length; i++) {
@@ -57,6 +58,10 @@ public class Entity {
                     break;
                 }
             }
+        } catch (RuntimeException e){
+            e.printStackTrace();
+        }
+
     }
 
 }
