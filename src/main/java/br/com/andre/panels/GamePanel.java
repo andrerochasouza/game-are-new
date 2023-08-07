@@ -1,5 +1,6 @@
 package br.com.andre.panels;
 
+import br.com.andre.engine.CollisionChecker;
 import br.com.andre.utils.YmlUtils;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.Logger;
@@ -48,4 +49,5 @@ public class GamePanel extends Pane {
     public int getTileMaxRow() {
         return tileMaxRow;
     }
+
 }

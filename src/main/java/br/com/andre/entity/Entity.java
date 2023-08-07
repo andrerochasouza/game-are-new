@@ -2,6 +2,7 @@ package br.com.andre.entity;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
 
@@ -12,6 +13,8 @@ public class Entity {
     public int speed;
     public String pathFolderSprites;
     public ImageView imageView;
+    public Rectangle solidArea;
+    public boolean collisionOn = false;
     public int animationVelocityMillis = 500;
 
     void toggleImageUp(){

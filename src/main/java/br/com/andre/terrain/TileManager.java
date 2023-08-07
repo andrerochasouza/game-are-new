@@ -1,14 +1,14 @@
 package br.com.andre.terrain;
 
-import br.com.andre.entity.Player;
 import br.com.andre.panels.GamePanel;
 import br.com.andre.utils.FileUtils;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TileManager {
@@ -39,6 +39,31 @@ public class TileManager {
         namedPathMaps.put(name, pathMap);
         namedPathTiles.put(name, pathTiles);
         mapIsOn.put(name, false);
+    }
+
+    public Tile getTile(int x, int y) {
+        Tile tileCorrect = null;
+        double spriteWidth = gamePanel.getTileSize(); // Largura do sprite
+        double spriteHeight = gamePanel.getTileSize(); // Altura do sprite
+
+        for (Node node : gruopTiles.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+
+                // Verificar se as coordenadas x e y estão dentro dos limites do sprite
+                if (x >= imageView.getX() && x < imageView.getX() + spriteWidth &&
+                        y >= imageView.getY() && y < imageView.getY() + spriteHeight) {
+                    for (Tile tile : tilesRender) {
+                        if (tile.imageView.equals(imageView)) {
+                            tileCorrect = tile;
+                            break; // Saia do loop interno se encontrar o tile
+                        }
+                    }
+                }
+            }
+        }
+
+        return tileCorrect;
     }
 
     private void loadMapByName(String name){
@@ -124,11 +149,28 @@ public class TileManager {
             int amountTiles = tileFiles.length;
             tilesImages = new Tile[amountTiles];
 
+            File collisionFile = tileFiles[tileFiles.length - 1];
+            if (!collisionFile.getName().equals("collision-tiles.txt")) {
+                log.error("Arquivo de colisão não encontrado.");
+                throw new RuntimeException("Arquivo de colisão não encontrado.");
+            } else {
+                log.debug("Arquivo de colisão encontrado: {}", collisionFile.getAbsolutePath());
+                amountTiles--;
+            }
+
+            HashMap<Integer, Boolean> mapCollision = new HashMap<>();
+            BufferedReader br = new BufferedReader(new FileReader(collisionFile));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(",");
+                mapCollision.put(Integer.parseInt(split[0]), Boolean.parseBoolean(split[1]));
+            }
+
             for (int i = 0; i < amountTiles; i++) {
                 File tileFile = tileFiles[i];
                 String pathResource = tileFile.getAbsolutePath().replace("\\", "/").split("game-are-new/")[1];
-                log.debug("Carregando tile: " + pathResource);
-                tilesImages[i] = new Tile(pathResource, false);
+                tilesImages[i] = new Tile(pathResource, mapCollision.get(i));
+                log.debug("Tile Carregado: {} - Collision: {}",  pathResource, mapCollision.get(i));
             }
 
             log.debug("Quantidade de tiles carregados: " + amountTiles);
@@ -136,6 +178,8 @@ public class TileManager {
         } catch (RuntimeException e) {
             log.error("Erro ao carregar tiles", e);
             throw new RuntimeException("Erro ao carregar tiles", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
