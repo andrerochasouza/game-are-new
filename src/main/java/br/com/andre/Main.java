@@ -1,7 +1,6 @@
 package br.com.andre;
 
 import br.com.andre.engine.Camera;
-import br.com.andre.engine.CollisionChecker;
 import br.com.andre.engine.KeyHandler;
 import br.com.andre.entity.Player;
 import br.com.andre.panels.Fps;
@@ -23,7 +22,6 @@ public class Main extends Application {
     private TileManager[] tileManager;
     private Camera camera;
     private KeyHandler keyHandler;
-    private CollisionChecker collisionChecker;
     private long lastTime = 0;
 
 
@@ -48,6 +46,8 @@ public class Main extends Application {
         tileManager[1].addMap("map-1",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1.txt",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1");
+
+
 
 
         primaryStage.setTitle("Game");
