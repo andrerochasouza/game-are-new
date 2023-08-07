@@ -1,8 +1,11 @@
 package br.com.andre;
 
+import br.com.andre.engine.AssetControlObject;
 import br.com.andre.engine.Camera;
 import br.com.andre.engine.KeyHandler;
 import br.com.andre.entity.Player;
+import br.com.andre.object.ObjectEnum;
+import br.com.andre.object.SuperObject;
 import br.com.andre.panels.Fps;
 import br.com.andre.panels.GamePanel;
 import br.com.andre.terrain.TileManager;
@@ -22,6 +25,8 @@ public class Main extends Application {
     private TileManager[] tileManager;
     private Camera camera;
     private KeyHandler keyHandler;
+    private SuperObject[] objects = new SuperObject[10];
+    private AssetControlObject assetControlObject;
     private long lastTime = 0;
 
 
@@ -47,7 +52,10 @@ public class Main extends Application {
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\construct-map-1.txt",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1");
 
-
+        assetControlObject = new AssetControlObject(gamePanel);
+        assetControlObject.addObject(ObjectEnum.KEY, 1, true, 100, 100);
+        assetControlObject.addObject(ObjectEnum.DOOR, 1, true, 200, 100);
+        assetControlObject.addObject(ObjectEnum.CHEST, 1, false, 300, 100);
 
 
         primaryStage.setTitle("Game");
@@ -83,12 +91,14 @@ public class Main extends Application {
     private void update() {
         player.update(tileManager);
         camera.update(player);
+        assetControlObject.update(ObjectEnum.KEY, ObjectEnum.DOOR);
         fpsPanel.update(System.nanoTime());
     }
 
     private void render() {
         tileManager[0].render("map-1");
         tileManager[1].render("map-1");
+        assetControlObject.render();
         player.render();
     }
 

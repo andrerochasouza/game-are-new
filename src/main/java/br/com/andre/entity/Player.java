@@ -8,14 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 
 public class Player extends Entity {
-    private static final Logger log = LogManager.getLogger(Player.class);
     private GamePanel gamePanel;
     private KeyHandler keyHandler;
     private long lastUpdateTime = System.currentTimeMillis();
