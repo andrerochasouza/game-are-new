@@ -113,12 +113,14 @@ public class Player extends Entity {
         if(gamePanel.getChildren().contains(imageView)){
             imageView.setX(this.x);
             imageView.setY(this.y);
+            imageView.toFront();
         } else {
             imageView.setX(this.x);
             imageView.setY(this.y);
             imageView.setFitHeight(gamePanel.getTileSize());
             imageView.setFitWidth(gamePanel.getTileSize());
             gamePanel.getChildren().add(imageView);
+            imageView.toFront();
         }
 
     }

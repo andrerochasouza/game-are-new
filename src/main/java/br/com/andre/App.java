@@ -39,8 +39,8 @@ public class App extends Application {
         fpsPanel = new Fps(gamePanel);
 
         tileManager = new TileManager[2];
-        tileManager[0] = new TileManager(gamePanel);
-        tileManager[1] = new TileManager(gamePanel);
+        tileManager[0] = new TileManager(gamePanel, player);
+        tileManager[1] = new TileManager(gamePanel, player);
 
         tileManager[0].addMap("map-1",
                 "C:\\github-repositories\\game-are-new\\src\\main\\resources\\sprites\\Maps\\Maps-W16-H12\\tile-map-1.txt",
@@ -57,7 +57,7 @@ public class App extends Application {
 
 
         primaryStage.setTitle("Game");
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.show();
 

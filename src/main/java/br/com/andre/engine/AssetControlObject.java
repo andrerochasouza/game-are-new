@@ -21,8 +21,10 @@ public class AssetControlObject {
         for (SuperObject superObject : objectHashMap.values()){
             if(superObject.getImageView().getParent() == null){
                 gamePanel.getChildren().add(superObject.getImageView());
+                superObject.getImageView().toFront();
             } else {
                 superObject.getImageView().relocate(superObject.getX(), superObject.getY());
+                superObject.getImageView().toFront();
             }
         }
     }
