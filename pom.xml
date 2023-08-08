@@ -3,15 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>jar</packaging>
     <groupId>br.com.andre</groupId>
     <artifactId>game-are-new</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
+    <name>game-are-new</name>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>br.com.andre.Main</main.class>
         <jlinkExecutable>C:\Users\1202000046\.jdks\corretto-11.0.17\bin\jlink</jlinkExecutable>
 
@@ -24,7 +25,6 @@
         <snakeyaml.version>2.0</snakeyaml.version>
         <javafx.plugin.version>0.0.8</javafx.plugin.version>
         <sormula.version>4.3</sormula.version>
-
     </properties>
 
     <dependencies>
@@ -124,7 +124,6 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
-                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -138,9 +137,13 @@
                     <stripDebug>true</stripDebug>
                     <noManPages>true</noManPages>
                     <launcher>app</launcher>
-                    <mainClass>br.com.andre.Main</mainClass>
+                    <mainClass>${main.class}</mainClass>
                     <jlinkImageName>app</jlinkImageName>
                     <jlinkZipName>app</jlinkZipName>
+                    <options>
+                        <option>--add-modules</option>
+                        <option>javafx.controls,javafx.fxml,javafx.graphics,org.yaml.snakeyaml,java.sql,sormula,org.apache.logging.log4j</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>
