@@ -1,6 +1,5 @@
 package br.com.andre.engine;
 
-import br.com.andre.Main;
 import br.com.andre.object.ObjectEnum;
 import br.com.andre.object.SuperObject;
 import br.com.andre.panels.GamePanel;
