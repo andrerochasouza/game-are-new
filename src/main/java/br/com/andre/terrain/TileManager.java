@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Timer;
 
 public class TileManager {
 
@@ -84,8 +85,11 @@ public class TileManager {
         gamePanel.getChildren().remove(this.gruopTiles);
 
         log.debug("Loading news tiles and map");
+        long start = System.currentTimeMillis();
         loadTiles(pathTile);
         loadMap(pathMap);
+        long end = System.currentTimeMillis();
+        log.debug("Time to load map: " + (end - start) / 1000.0 + "s");
 
         log.debug("Adding new map in game panel");
         gamePanel.getChildren().add(this.gruopTiles);

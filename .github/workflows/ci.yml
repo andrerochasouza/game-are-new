@@ -25,10 +25,10 @@ jobs:
         run: mvn clean package assembly:single
 
       - name: Rename JAR artifact
-        run: mv target/game-are-new-0.3-jar-with-dependencies.jar target/game-are-new-0.3.jar
+        run: mv target/game-are-new-0.3-jar-with-dependencies.jar target/game-are-new-0.3-result.jar
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v2
         with:
           name: game-jar
-          path: target/game-are-new-0.3.jar
+          path: target/game-are-new-0.3-result.jar
