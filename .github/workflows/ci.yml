@@ -21,20 +21,11 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: Show JDK path (for debugging)
-        run: echo $env:JAVA_HOME
-
       - name: Build with Maven
-        run: |
-          $jlinkExecutable = "<jlinkExecutable>" + $env:JAVA_HOME + "\bin\jlink</jlinkExecutable>"
-          (Get-Content pom.xml) |
-          ForEach-Object { $_ -replace '<jlinkExecutable>.*</jlinkExecutable>', $jlinkExecutable } |
-          Set-Content pom.xml
-          Get-Content pom.xml
-          mvn clean compile javafx:jlink 
+        run: mvn clean package assembly:single
 
-      - name: Upload ZIP artifact
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v2
         with:
           name: app-zip
-          path: target/app.zip
+          path: target/game-are-new-0.3-SNAPSHOT-jar-with-dependencies.zip
